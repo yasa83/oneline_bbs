@@ -1,7 +1,5 @@
 <?php
   // ここにDBに登録する処理を記述する
-    $nickname = htmlspecialchars($_POST['nickname']);
-    $comment = htmlspecialchars($_POST['comment']);
 
 
     //１　データベースに接続する処理
@@ -11,12 +9,21 @@
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
 
+
+    if(!empty($_POST)){
+    $nickname = htmlspecialchars($_POST['nickname']);
+    $comment = htmlspecialchars($_POST['comment']);
+    $time = date('Y-m-d-G-i-s');
+    $created = $time;
+
     //SQLに保存する
-    $sql = 'INSERT INTO `posts`(`nickname`, `comment`) VALUES (?, ?)';
+    $sql = 'INSERT INTO `posts`(`nickname`, `comment`,`created`) VALUES (?, ? ,?)';
     $data[] =  $nickname;
     $data[] =  $comment;
+    $data[] = $created;
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
+    }
 
     $dbh = null;
 
