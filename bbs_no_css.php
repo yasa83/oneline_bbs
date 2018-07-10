@@ -12,9 +12,11 @@
     $dbh->query('SET NAMES utf8');
 
     //SQLに保存する
-    $sql = 'INSERT INTO `posts`(`nickname`, `comment`) VALUES ("'. $nickname.'","'.$comment.'")';
+    $sql = 'INSERT INTO `posts`(`nickname`, `comment`) VALUES (?, ?)';
+    $data[] =  $nickname;
+    $data[] =  $comment;
     $stmt = $dbh->prepare($sql);
-    $stmt->execute();
+    $stmt->execute($data);
 
     $dbh = null;
 
