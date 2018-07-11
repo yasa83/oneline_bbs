@@ -24,7 +24,27 @@
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     }
-       $dbh = null;
+
+
+
+
+    //データを取り出す
+    $sql = 'SELECT * FROM `posts` ORDER BY created ASC';
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+
+    $comments = array();
+    while (1) {
+    $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($rec == false) {
+    break;
+  }
+  $comments[] = $rec;
+  }
+
+   $dbh = null;
+
+?>
 
 
 ?>
@@ -96,6 +116,7 @@
       <!-- 画面右側 -->
       <div class="col-md-8 content-margin-top">
         <div class="timeline-centered">
+          <?php foreach ($comments as $comment): ?>
           <article class="timeline-entry">
               <div class="timeline-entry-inner">
                   <div class="timeline-icon bg-success">
@@ -103,12 +124,15 @@
                       <i class="fa fa-cogs"></i>
                   </div>
                   <div class="timeline-label">
-                      <h2><a href="#">seedくん</a> <span>2016-01-20</span></h2>
-                      <p>つぶやいたコメント</p>
+                      <h2><a href="#"><?php echo $comment['nickname'] ?></a> 
+                        <span><?php echo $comment['created'] ?></span>
+                        <p><?php echo $comment['comment'] ?></p>
+                      </h2>
+                      
                   </div>
               </div>
           </article>
-
+       <?php endforeach; ?>
           <article class="timeline-entry begin">
               <div class="timeline-entry-inner">
                   <div class="timeline-icon" style="-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);">
