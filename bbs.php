@@ -1,7 +1,7 @@
 <?php
   // ここにDBに登録する処理を記述する
 
-
+    date_default_timezone_set('Asia/Manila');
     //１　データベースに接続する処理
     $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
     $user = 'root';
@@ -11,10 +11,11 @@
 
     // 呟かれたデータを受け取る
     if(!empty($_POST)){
-    $nickname = htmlspecialchars($_POST['nickname']);
-    $comment = htmlspecialchars($_POST['comment']);
-    $time = date('Y-m-d H:i:s');
-    $created = $time;
+      $nickname = htmlspecialchars($_POST['nickname']);
+      $comment = htmlspecialchars($_POST['comment']);
+      // $time = date('Y-m-d H:i:s');
+      $time = date('Y-m-d-H-i-s');
+      $created = $time;
 
     //SQLに保存する
     $sql = 'INSERT INTO `posts`(`nickname`, `comment`,`created`) VALUES (?, ? ,?)';
@@ -35,19 +36,18 @@
 
     $comments = array();
     while (1) {
-    $rec = $stmt->fetch(PDO::FETCH_ASSOC);
-    if($rec == false) {
-    break;
-  }
-  $comments[] = $rec;
-  }
+        $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+        if($rec == false) {
+        break;
+              }
+    $comments[] = $rec;
+              }
 
    $dbh = null;
 
 ?>
 
 
-?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -126,7 +126,9 @@
                   <div class="timeline-label">
                       <h2><a href="#"><?php echo $comment['nickname'] ?></a> 
                         <span><?php echo $comment['created'] ?></span>
+                        <!-- <a href="" class="btn btn-success"> -->
                         <p><?php echo $comment['comment'] ?></p>
+                        
                       </h2>
                       
                   </div>
