@@ -9,11 +9,11 @@
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
 
-
+    // 呟かれたデータを受け取る
     if(!empty($_POST)){
     $nickname = htmlspecialchars($_POST['nickname']);
     $comment = htmlspecialchars($_POST['comment']);
-    $time = date('Y-m-d-G-i-s');
+    $time = date('Y-m-d H:i:s');
     $created = $time;
 
     //SQLに保存する
@@ -25,7 +25,6 @@
     $stmt->execute($data);
     }
 
-    $dbh = null;
 
 ?>
 <!DOCTYPE html>
@@ -41,6 +40,33 @@
       <p><button type="submit" >つぶやく</button></p>
     </form>
     <!-- ここにニックネーム、つぶやいた内容、日付を表示する -->
+
+<?php
+
+
+    //データを取り出す
+    $sql = 'SELECT * FROM `posts` ORDER BY created ASC';
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+
+    while (1) {
+    $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($rec == false) {
+    break;
+  }
+  echo $rec['nickname'] . '<br>';
+  echo $rec['comment'] . '<br>';
+  echo $rec['created'] . '<br>';
+  echo '<hr>';
+
+}
+
+   $dbh = null;
+
+?>
+
+
+
 
 </body>
 </html>
