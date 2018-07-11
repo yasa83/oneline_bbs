@@ -1,3 +1,33 @@
+<?php
+  // ここにDBに登録する処理を記述する
+
+
+    //１　データベースに接続する処理
+    $dsn = 'mysql:dbname=oneline_bbs;host=localhost';
+    $user = 'root';
+    $password = '';
+    $dbh = new PDO($dsn, $user, $password);
+    $dbh->query('SET NAMES utf8');
+
+    // 呟かれたデータを受け取る
+    if(!empty($_POST)){
+    $nickname = htmlspecialchars($_POST['nickname']);
+    $comment = htmlspecialchars($_POST['comment']);
+    $time = date('Y-m-d H:i:s');
+    $created = $time;
+
+    //SQLに保存する
+    $sql = 'INSERT INTO `posts`(`nickname`, `comment`,`created`) VALUES (?, ? ,?)';
+    $data[] =  $nickname;
+    $data[] =  $comment;
+    $data[] = $created;
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    }
+       $dbh = null;
+
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
